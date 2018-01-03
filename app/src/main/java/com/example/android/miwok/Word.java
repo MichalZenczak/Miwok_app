@@ -21,8 +21,6 @@ public class Word {
      *                           (such as english).
      * @param MiwokTranlation is the word for miwok language.
      */
-
-
     public Word(String DefaultTranslation, String MiwokTranlation){
         mDefaultTranslation = DefaultTranslation;
         mMiwokTranslation = MiwokTranlation;
