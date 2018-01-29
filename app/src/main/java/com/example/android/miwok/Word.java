@@ -18,6 +18,8 @@ public class Word {
     /**An image to help visualize the word */
     private int mImageResourceId = NO_IMAGE_PROVIDED;
 
+    private int mAudioResourceId;
+
     private static final int NO_IMAGE_PROVIDED = -1;
 
     /**
@@ -28,9 +30,10 @@ public class Word {
      *                           (such as english).
      * @param MiwokTranlation is the word for miwok language.
      */
-    public Word(String DefaultTranslation, String MiwokTranlation){
+    public Word(String DefaultTranslation, String MiwokTranlation, int audioResourceId){
         mDefaultTranslation = DefaultTranslation;
         mMiwokTranslation = MiwokTranlation;
+        mAudioResourceId = audioResourceId;
     }
     /**
      * Constructor
@@ -41,11 +44,15 @@ public class Word {
      * @param MiwokTranlation is the word for miwok language.
      *
      * @param imageResourceId the image resource ID
+     *
+     * @param audioResourceId the audio resource ID.
      */
-    public Word(String DefaultTranslation, String MiwokTranlation, int imageResourceId){
+
+    public Word(String DefaultTranslation, String MiwokTranlation, int imageResourceId, int audioResourceId){
         mDefaultTranslation = DefaultTranslation;
         mMiwokTranslation = MiwokTranlation;
         mImageResourceId = imageResourceId;
+        mAudioResourceId = audioResourceId;
     }
     /**
      * Get the default translation for the word.
@@ -65,6 +72,11 @@ public class Word {
      * Get the image resource ID.
      * */
     public int getImageResourceId() {return mImageResourceId;}
+
+    /**
+     * Get the audio resource ID.
+     * */
+    public int getAudioResourceId() {return mAudioResourceId;}
 
     /**
      * Returns whether or not there is an image for this word
