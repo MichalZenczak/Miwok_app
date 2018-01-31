@@ -29,6 +29,8 @@ public class Word {
      * @param DefaultTranslation is the word for a language that the user is familiar with
      *                           (such as english).
      * @param MiwokTranlation is the word for miwok language.
+     *
+     * @param audioResourceId the audio resource ID.
      */
     public Word(String DefaultTranslation, String MiwokTranlation, int audioResourceId){
         mDefaultTranslation = DefaultTranslation;
@@ -83,4 +85,13 @@ public class Word {
      * */
     public boolean hasImage(){return mImageResourceId != NO_IMAGE_PROVIDED;}
 
+    @Override
+    public String toString() {
+        return "Word{" +
+                "mDefaultTranslation='" + mDefaultTranslation + '\'' +
+                ", mMiwokTranslation='" + mMiwokTranslation + '\'' +
+                ", mImageResourceId=" + mImageResourceId +
+                ", mAudioResourceId=" + mAudioResourceId +
+                '}';
+    }
 }
