@@ -1,17 +1,24 @@
 package com.example.android.miwok;
 
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ColorsActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ColorsFragment extends Fragment {
 
     /**Handles playback of all sound files */
     private MediaPlayer mMediaPlayer;
@@ -57,13 +64,19 @@ public class ColorsActivity extends AppCompatActivity {
         }
     };
 
+    public ColorsFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
+
 
         // Create and setup the {@link AudioManager} to request audio focus.
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         final ArrayList<Word> colorWords = new ArrayList<Word>();
         colorWords.add(new Word("red","weṭeṭṭi", R.drawable.color_red, R.raw.color_red));
@@ -75,8 +88,8 @@ public class ColorsActivity extends AppCompatActivity {
         colorWords.add(new Word("dusty yellow","ṭopiisә", R.drawable.color_dusty_yellow, R.raw.color_dusty_yellow));
         colorWords.add(new Word("mustard yellow", "chiwiiṭә", R.drawable.color_mustard_yellow, R.raw.color_mustard_yellow));
 
-        WordAdapter colorAdapter = new WordAdapter(this, colorWords, R.color.category_colors);
-        ListView listView = findViewById(R.id.list);
+        WordAdapter colorAdapter = new WordAdapter(getActivity(), colorWords, R.color.category_colors);
+        ListView listView = rootView.findViewById(R.id.list);
         listView.setAdapter(colorAdapter);
 
         // Set a click listener to play the audio when the list item is clicked on
@@ -101,7 +114,7 @@ public class ColorsActivity extends AppCompatActivity {
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                     //We have audio focus now
-                    mMediaPlayer = MediaPlayer.create(ColorsActivity.this, colorWord.getAudioResourceId());
+                    mMediaPlayer = MediaPlayer.create(getActivity(), colorWord.getAudioResourceId());
                     mMediaPlayer.start();
 
                     // Setup a listener on the media player, so that we can stop and release the
@@ -110,15 +123,16 @@ public class ColorsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         // When the activity is stopped, release the mediaPlayer resources because we won't be playing
         // any more sounds.
         releaseMediaPlayer();
-
     }
 
     /**
@@ -140,4 +154,5 @@ public class ColorsActivity extends AppCompatActivity {
             mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
         }
     }
+
 }

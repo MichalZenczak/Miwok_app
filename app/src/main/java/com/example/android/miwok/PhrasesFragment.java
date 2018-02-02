@@ -1,17 +1,24 @@
 package com.example.android.miwok;
 
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class FamilyActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PhrasesFragment extends Fragment {
 
     /**Handles playback of all sound files */
     private MediaPlayer mMediaPlayer;
@@ -57,34 +64,40 @@ public class FamilyActivity extends AppCompatActivity {
         }
     };
 
+
+    public PhrasesFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
         // Create and setup the {@link AudioManager} to request audio focus.
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-        final ArrayList<Word> familyWords = new ArrayList<Word>();
-        familyWords.add(new Word("father","әpә", R.drawable.family_father, R.raw.family_father));
-        familyWords.add(new Word("mother", "әṭa", R.drawable.family_mother, R.raw.family_mother));
-        familyWords.add(new Word("son","angsi", R.drawable.family_son, R.raw.family_son));
-        familyWords.add(new Word("daughter","tune", R.drawable.family_daughter, R.raw.family_daughter));
-        familyWords.add(new Word("older brother","taachi", R.drawable.family_older_brother, R.raw.family_older_brother));
-        familyWords.add(new Word("younger brother", "chalitti", R.drawable.family_younger_brother, R.raw.family_younger_brother));
-        familyWords.add(new Word("older sister","teṭe", R.drawable.family_older_sister, R.raw.family_older_sister));
-        familyWords.add(new Word("younger sister", "kolliti", R.drawable.family_younger_sister, R.raw.family_younger_sister));
-        familyWords.add(new Word("grandmother","ama", R.drawable.family_grandmother, R.raw.family_grandmother));
-        familyWords.add(new Word("grandfather", "paapa", R.drawable.family_grandfather, R.raw.family_grandfather));
+        final ArrayList<Word> phrasesWords = new ArrayList<Word>();
+        phrasesWords.add(new Word("Where are you going?","minto wuksus?", R.raw.phrase_where_are_you_going));
+        phrasesWords.add(new Word("What is your name?", "tinnә oyaase'nә?", R.raw.phrase_what_is_your_name));
+        phrasesWords.add(new Word("My name is...","oyaaset...", R.raw.phrase_my_name_is));
+        phrasesWords.add(new Word("How are you feeling?","michәksәs?", R.raw.phrase_how_are_you_feeling));
+        phrasesWords.add(new Word("I’m feeling good.","kuchi achit", R.raw.phrase_im_feeling_good));
+        phrasesWords.add(new Word("Are you coming?", "әәnәs'aa?", R.raw.phrase_are_you_coming));
+        phrasesWords.add(new Word("Yes, I’m coming.","hәә’ әәnәm", R.raw.phrase_yes_im_coming));
+        phrasesWords.add(new Word("I’m coming.", "әәnәm", R.raw.phrase_im_coming));
+        phrasesWords.add(new Word("Let’s go.","yoowutis", R.raw.phrase_lets_go));
+        phrasesWords.add(new Word("Come here.", "әnni'nem", R.raw.phrase_come_here));
 
-        WordAdapter familyAdapter = new WordAdapter(this, familyWords, R.color.category_family);
-        ListView listView = findViewById(R.id.list);
-        listView.setAdapter(familyAdapter);
+        final WordAdapter phrasesAdapter = new WordAdapter(getActivity(), phrasesWords, R.color.category_phrases);
+        ListView listView = rootView.findViewById(R.id.list);
+        listView.setAdapter(phrasesAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Word familyWord = familyWords.get(position);
+                Word phraseWord = phrasesWords.get(position);
 
                 //Release the mediaPlayer if it currently exists because we are about to
                 //play a different sound file.
@@ -101,7 +114,7 @@ public class FamilyActivity extends AppCompatActivity {
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
                     //We have audio focus now
-                    mMediaPlayer = MediaPlayer.create(FamilyActivity.this, familyWord.getAudioResourceId());
+                    mMediaPlayer = MediaPlayer.create(getActivity(), phraseWord.getAudioResourceId());
                     mMediaPlayer.start();
 
                     // Setup a listener on the media player, so that we can stop and release the
@@ -111,15 +124,15 @@ public class FamilyActivity extends AppCompatActivity {
             }
         });
 
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         // When the activity is stopped, release the mediaPlayer resources because we won't be playing
         // any more sounds.
         releaseMediaPlayer();
-
     }
 
     /**
@@ -141,4 +154,5 @@ public class FamilyActivity extends AppCompatActivity {
             mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
         }
     }
+
 }
